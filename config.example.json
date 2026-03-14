@@ -1,0 +1,117 @@
+{
+  "github": {
+    "review_account": "",
+    "default_org": ""
+  },
+  "review": {
+    "language": "en",
+    "severity_levels": {
+      "critical": "🔴 CRITICAL",
+      "major": "🟠 MAJOR",
+      "minor": "🟡 MINOR",
+      "suggestion": "🔵 SUGGESTION",
+      "positive": "✅ POSITIVE"
+    },
+    "default_event": "COMMENT",
+    "default_tier": "focused",
+    "usage": {
+      "active_plan": "max_5x",
+      "default_model": "auto",
+      "input_output_ratio": [0.70, 0.30]
+    },
+    "max_files_inline_review": 30,
+    "ignore_patterns": [
+      "*.designer.cs",
+      "*.generated.cs",
+      "*.g.cs",
+      "package-lock.json",
+      "yarn.lock",
+      "*.min.js",
+      "*.min.css",
+      "Migrations/*.cs"
+    ],
+    "tiers": {
+      "quick": {
+        "agents": ["code"],
+        "read_local_context": false,
+        "severity_filter": ["critical", "major"]
+      },
+      "focused": {
+        "agents": ["code", "security", "testing", "qa"],
+        "read_local_context": true,
+        "max_context_files": 15,
+        "severity_filter": null
+      },
+      "full": {
+        "agents": ["code", "security", "testing", "qa", "architecture", "performance"],
+        "read_local_context": true,
+        "max_context_files": 30,
+        "severity_filter": null
+      }
+    }
+  },
+  "agents": {
+    "full_review": ["code", "security", "testing", "qa"],
+    "available": {
+      "code": { "enabled": true },
+      "security": { "enabled": true },
+      "testing": { "enabled": true },
+      "qa": { "enabled": true },
+      "architecture": { "enabled": false },
+      "performance": { "enabled": false }
+    }
+  },
+  "repo_profiles": {
+    "your-org/backend-api": "dotnet-core-api",
+    "your-org/frontend-app": "typescript-react",
+    "your-org/mobile-app": "typescript-react-native",
+    "your-org/data-pipeline": "python"
+  },
+  "slack_bot": {
+    "default_tier": "focused",
+    "max_concurrent_reviews": 1,
+    "rate_limit_per_user_hour": 5,
+    "max_turns": 100,
+    "timeout_minutes": 10,
+    "allowed_users": [],
+    "allowed_channels": [],
+    "auto_post": true
+  },
+  "notifications": {
+    "providers": {
+      "slack": {
+        "enabled": false,
+        "env_var": "SLACK_WEBHOOK_URL",
+        "template": "templates/notifications/slack.json"
+      },
+      "teams": {
+        "enabled": false,
+        "env_var": "TEAMS_WEBHOOK_URL",
+        "template": "templates/notifications/teams.json"
+      },
+      "discord": {
+        "enabled": false,
+        "env_var": "DISCORD_WEBHOOK_URL",
+        "template": "templates/notifications/discord.json"
+      }
+    },
+    "settings": {
+      "user_resolution": {
+        "enabled": true,
+        "ttl_days": 90,
+        "slack_token_env": "SLACK_RESOLVE_TOKEN"
+      },
+      "include_summary_table": true,
+      "include_review_body": true,
+      "include_usage_stats": true,
+      "max_body_length": 2800,
+      "user_mapping": {
+        "github-username": {
+          "slack": "USLACKID123",
+          "teams": "user@company.com",
+          "discord": "userid123"
+        }
+      }
+    }
+  }
+}
