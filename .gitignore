@@ -1,0 +1,24 @@
+# Config (contains org-specific data)
+config.json
+
+# Environment variables (webhook secrets)
+.env
+
+# Claude Code
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Slack Bot
+integrations/slack-bot/node_modules/
+integrations/slack-bot/.env
+integrations/slack-bot/dist/
+
+# User resolution cache (auto-populated, user-specific)
+.user-mapping.json
+
+# Temporary files
+*.tmp
+*.log
