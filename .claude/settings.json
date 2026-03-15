@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr:*)",
+      "Bash(gh api:*)",
+      "Bash(gh search:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh auth:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(curl -s -X POST*)",
+      "Bash(curl -s -H*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(gh pr review*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f config.json || (echo 'ERROR: config.json not found. Copy config.example.json to config.json and configure it.' && exit 1)"
+          }
+        ]
+      }
+    ]
+  }
+}
