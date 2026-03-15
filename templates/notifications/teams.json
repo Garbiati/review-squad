@@ -1,0 +1,40 @@
+{
+  "provider": "teams",
+  "content_type": "application/json",
+  "mention_format": "<at>{{USER_ID}}</at>",
+  "fallback_mention_format": "@{{GITHUB_USERNAME}}",
+  "body": {
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    "themeColor": "{{THEME_COLOR}}",
+    "summary": "{{ICON}} {{REVIEW_TYPE_LABEL}} — {{OWNER}}/{{REPO}}#{{NUMBER}}",
+    "sections": [
+      {
+        "activityTitle": "{{ICON}} {{REVIEW_TYPE_LABEL}}",
+        "facts": [
+          { "name": "Repo", "value": "{{OWNER}}/{{REPO}}" },
+          { "name": "PR", "value": "[#{{NUMBER}} {{PR_TITLE}}]({{PR_URL}})" },
+          { "name": "{{AUTHOR_LABEL}}", "value": "{{AUTHOR_MENTION}}" },
+          { "name": "{{RECOMMENDATION_LABEL}}", "value": "{{RECOMMENDATION_EMOJI}} {{RECOMMENDATION}}" }
+        ],
+        "text": "{{REVIEW_BODY}}"
+      },
+      {
+        "facts": [
+          { "name": "📊 {{USAGE_TOKENS}}", "value": "{{TOTAL_TOKENS}} ({{MODEL_NAME}})" },
+          { "name": "⏱️ {{USAGE_DURATION}}", "value": "{{DURATION}} | {{NUM_PERSPECTIVES}} {{USAGE_PERSPECTIVES}}" },
+          { "name": "💰 {{USAGE_COST_API}}", "value": "{{API_COST}}" },
+          { "name": "📋 {{USAGE_COST_PLAN}}", "value": "{{PLAN_INFO}} · ~{{WINDOW_PCT}}% {{USAGE_WINDOW_PCT}}" },
+          { "name": "📈 {{USAGE_VIABILITY}}", "value": "{{REVIEWS_PER_WINDOW}} · {{COST_PER_REVIEW}}" }
+        ]
+      }
+    ],
+    "potentialAction": [
+      {
+        "@type": "OpenUri",
+        "name": "{{VIEW_ON_GITHUB_LABEL}}",
+        "targets": [{ "os": "default", "uri": "{{PR_URL}}" }]
+      }
+    ]
+  }
+}

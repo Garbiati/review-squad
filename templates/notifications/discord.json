@@ -1,0 +1,23 @@
+{
+  "provider": "discord",
+  "content_type": "application/json",
+  "mention_format": "<@{{USER_ID}}>",
+  "fallback_mention_format": "@{{GITHUB_USERNAME}}",
+  "body": {
+    "content": "{{AUTHOR_MENTION}}",
+    "embeds": [
+      {
+        "title": "{{ICON}} {{REVIEW_TYPE_LABEL}} — {{OWNER}}/{{REPO}}#{{NUMBER}}",
+        "url": "{{PR_URL}}",
+        "color": "{{EMBED_COLOR}}",
+        "fields": [
+          { "name": "PR", "value": "[#{{NUMBER}} {{PR_TITLE}}]({{PR_URL}})", "inline": true },
+          { "name": "{{RECOMMENDATION_LABEL}}", "value": "{{RECOMMENDATION_EMOJI}} {{RECOMMENDATION}}", "inline": true },
+          { "name": "{{SUMMARY_TABLE_LABEL}}", "value": "{{SUMMARY_TABLE}}" }
+        ],
+        "description": "{{REVIEW_BODY}}",
+        "footer": { "text": "review-squad | {{TOTAL_TOKENS}} · {{MODEL_NAME}} · {{NUM_PERSPECTIVES}} persp · {{DURATION}} | {{PLAN_INFO}} ~{{WINDOW_PCT}}% | {{COST_PER_REVIEW}}" }
+      }
+    ]
+  }
+}

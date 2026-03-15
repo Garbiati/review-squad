@@ -1,0 +1,145 @@
+{
+  "provider": "slack",
+  "content_type": "application/json",
+  "mention_format": "<@{{USER_ID}}>",
+  "fallback_mention_format": "@{{GITHUB_USERNAME}}",
+  "body": {
+    "blocks": [
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": "{{ICON}} {{REVIEW_TYPE_LABEL}} — PR #{{NUMBER}}",
+          "emoji": true
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{EXECUTIVE_SUMMARY}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "fields": [
+          { "type": "mrkdwn", "text": "*Repo*\n`{{OWNER}}/{{REPO}}`" },
+          { "type": "mrkdwn", "text": "*PR*\n<{{PR_URL}}|#{{NUMBER}} {{PR_TITLE}}>" },
+          { "type": "mrkdwn", "text": "*{{AUTHOR_LABEL}}*\n{{AUTHOR_MENTION}}" },
+          { "type": "mrkdwn", "text": "*{{RECOMMENDATION_LABEL}}*\n{{RECOMMENDATION_EMOJI}} {{RECOMMENDATION}}" },
+          { "type": "mrkdwn", "text": "*Branch*\n`{{HEAD_BRANCH}}` → `{{BASE_BRANCH}}`" },
+          { "type": "mrkdwn", "text": "*{{CHANGES_LABEL}}*\n+{{ADDITIONS}} / -{{DELETIONS}} em {{FILE_COUNT}} arquivos" }
+        ]
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{POSITIVES_BLOCK}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{PERSPECTIVE_CODE}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{PERSPECTIVE_SECURITY}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{PERSPECTIVE_TESTING}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{PERSPECTIVE_QA}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{PERSPECTIVE_ARCHITECTURE}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{PERSPECTIVE_PERFORMANCE}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{SUMMARY_COUNTS}}"
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{RECOMMENDATION_BLOCK}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "actions",
+        "elements": [
+          {
+            "type": "button",
+            "text": { "type": "plain_text", "text": "📎 {{VIEW_ON_GITHUB_LABEL}}", "emoji": true },
+            "url": "{{PR_URL}}",
+            "style": "primary"
+          }
+        ]
+      }
+    ]
+  },
+  "usage_block": [
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "📊  {{USAGE_TOKENS}}: {{TOTAL_TOKENS}}  ·  {{USAGE_MODEL}}: {{MODEL_NAME}}  ·  {{USAGE_PERSPECTIVES}}: {{NUM_PERSPECTIVES}}  ·  {{USAGE_DURATION}}: {{DURATION}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "💰  {{USAGE_COST_API}}: {{API_COST}}  ·  {{USAGE_COST_PLAN}}: {{PLAN_INFO}} · ~{{WINDOW_PCT}}% {{USAGE_WINDOW_PCT}}  ·  {{USAGE_VIABILITY}}: {{REVIEWS_PER_WINDOW}}  ·  {{COST_PER_REVIEW}}"
+        }
+      ]
+    }
+  ],
+  "formatting_guidelines": {
+    "executive_summary": "📌 *Resumo Executivo* block: 5 lines max, non-technical, praise what's good, flag what needs attention. C-Level readable.",
+    "positives_block": "✅  *O que está bom* — bullet points with \\n\\n spacing between items",
+    "perspective_blocks": "Each perspective: emoji+bold header, then \\n\\n between each finding. 🔴/🟠 findings get full description with file ref and → Fix suggestion. 🟡 findings get one-liner each.",
+    "summary_counts": "Inline format: 🔴 X Críticos  ·  🟠 X Importantes  ·  🟡 X Menores  ·  🔵 X Sugestões  ·  ✅ X Positivos. NO markdown tables (Slack doesn't render them).",
+    "recommendation_block": "⚠️ or ✅ recommendation + numbered priority list with corrections and improvements separated",
+    "max_chars_per_section": 3000,
+    "separator": "  ·  "
+  }
+}
