@@ -1,0 +1,43 @@
+{
+  "last_updated": "2026-03-18",
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "models": {
+    "claude-opus-4-6": { "input_per_mtok": 5.00, "output_per_mtok": 25.00 },
+    "claude-opus-4-5": { "input_per_mtok": 5.00, "output_per_mtok": 25.00 },
+    "claude-sonnet-4-6": { "input_per_mtok": 3.00, "output_per_mtok": 15.00 },
+    "claude-sonnet-4-5": { "input_per_mtok": 3.00, "output_per_mtok": 15.00 },
+    "claude-haiku-4-5": { "input_per_mtok": 1.00, "output_per_mtok": 5.00 },
+    "claude-haiku-3-5": { "input_per_mtok": 0.80, "output_per_mtok": 4.00 }
+  },
+  "plans": {
+    "pro": {
+      "name": "Claude Pro",
+      "monthly_cost_usd": 20,
+      "window_hours": 5,
+      "tokens_per_window": 45000000,
+      "weekly_budget_tokens": null,
+      "notes": "Approximate values. Adjust based on your actual experience."
+    },
+    "max_5x": {
+      "name": "Claude Max 5x",
+      "monthly_cost_usd": 100,
+      "window_hours": 5,
+      "tokens_per_window": 225000000,
+      "weekly_budget_tokens": null
+    },
+    "max_20x": {
+      "name": "Claude Max 20x",
+      "monthly_cost_usd": 200,
+      "window_hours": 5,
+      "tokens_per_window": 900000000,
+      "weekly_budget_tokens": null
+    },
+    "team": {
+      "name": "Claude Team",
+      "monthly_cost_usd": 30,
+      "window_hours": 5,
+      "tokens_per_window": 67500000,
+      "weekly_budget_tokens": null
+    }
+  }
+}
