@@ -1,0 +1,15 @@
+# Aider configuration for review-squad
+# See: https://aider.chat/docs/config/aider_conf.html
+
+# Read-only files that provide review context
+read:
+  - CLAUDE.md
+  - config.json
+  - profiles/stacks/default.md
+  - profiles/agents/security.md
+  - profiles/agents/testing.md
+  - profiles/agents/qa.md
+  - profiles/agents/architecture.md
+  - profiles/agents/performance.md
+  - templates/review-comment.md
+  - templates/review-summary.md
