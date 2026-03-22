@@ -1,7 +1,6 @@
 # review-squad
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-blueviolet)](https://docs.anthropic.com/en/docs/claude-code)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 **Multi-perspective PR review powered by Claude Code. No servers, no SaaS — just your subscription.**
@@ -293,11 +292,36 @@ See complete examples:
 
 ---
 
+## Branch Strategy
+
+```
+feature/* ──→ develop ──→ staging ──→ main
+fix/*     ──→ develop ──→ staging ──→ main
+hotfix/*  ──→ main (emergency only)
+```
+
+| Branch | Purpose | Protection |
+|--------|---------|------------|
+| `main` | Stable, production-ready | PR + approval required, linear history enforced |
+| `staging` | Homologation / pre-release testing | PR + approval required |
+| `develop` | Active development | Protected from force push and deletion |
+
+All PRs require maintainer approval. See the [Rulesets](https://github.com/Garbiati/review-squad/rules) for details.
+
+---
+
 ## Contributing
 
 Contributions welcome! The easiest way to contribute is adding a new [stack profile](docs/ADDING-PROFILES.md) or [review perspective](docs/ADDING-AGENTS.md).
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+**Quick steps:**
+1. Fork the repo
+2. Branch from `develop` (`feature/your-feature`)
+3. Make changes and test locally
+4. Open a PR targeting `develop`
+5. Wait for maintainer review
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide, branch naming conventions, and contribution types.
 
 ---
 
