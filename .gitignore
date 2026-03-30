@@ -24,7 +24,5 @@ integrations/slack-bot/dist/
 *.log
 
 # Review artifacts (generated per review session, overwritten each run)
-comments.json
-review_body.md
-review_payload.json
-update_payload.json
+tmp/*
+!tmp/.gitkeep

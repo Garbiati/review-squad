@@ -150,7 +150,7 @@ gh api repos/<owner>/<repo>/pulls/<number>/reviews \
   -f body="<review_body>" \
   -f event="<COMMENT|REQUEST_CHANGES>" \
   -f commit_id="$HEAD_SHA" \
-  --input comments.json
+  --input tmp/comments.json
 ```
 
 Where the input JSON contains the comments array:
