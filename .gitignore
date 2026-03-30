@@ -22,3 +22,9 @@ integrations/slack-bot/dist/
 # Temporary files
 *.tmp
 *.log
+
+# Review artifacts (generated per review session, overwritten each run)
+comments.json
+review_body.md
+review_payload.json
+update_payload.json
