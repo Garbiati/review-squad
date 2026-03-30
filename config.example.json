@@ -82,17 +82,20 @@
       "slack": {
         "enabled": false,
         "env_var": "SLACK_WEBHOOK_URL",
-        "template": "templates/notifications/slack.json"
+        "template": "templates/notifications/slack.json",
+        "followup_template": "templates/notifications/slack-followup.json"
       },
       "teams": {
         "enabled": false,
         "env_var": "TEAMS_WEBHOOK_URL",
-        "template": "templates/notifications/teams.json"
+        "template": "templates/notifications/teams.json",
+        "followup_template": "templates/notifications/teams-followup.json"
       },
       "discord": {
         "enabled": false,
         "env_var": "DISCORD_WEBHOOK_URL",
-        "template": "templates/notifications/discord.json"
+        "template": "templates/notifications/discord.json",
+        "followup_template": "templates/notifications/discord-followup.json"
       }
     },
     "settings": {

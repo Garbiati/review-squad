@@ -82,6 +82,15 @@ After posting a review, commands can optionally send notifications to communicat
 | Microsoft Teams | `TEAMS_WEBHOOK_URL` | `templates/notifications/teams.json` | Template ready |
 | Discord | `DISCORD_WEBHOOK_URL` | `templates/notifications/discord.json` | Template ready |
 
+**Notification types:** Each provider has two templates — the initial review and the follow-up:
+
+| Type | Slack | Teams | Discord |
+|------|-------|-------|---------|
+| Initial review | `slack.json` | `teams.json` | `discord.json` |
+| Follow-up (re-review) | `slack-followup.json` | `teams-followup.json` | `discord-followup.json` |
+
+The follow-up template is used when the PR author addresses review findings and the reviewer analyzes the corrections. It shows applied vs not-applied corrections, retracted findings (if any), and the updated recommendation (e.g., REQUEST_CHANGES → APPROVE).
+
 **Adding a new provider:**
 1. Create template in `templates/notifications/<provider>.json` following the existing format
 2. Add entry in `config.example.json > notifications.providers`

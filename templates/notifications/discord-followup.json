@@ -1,0 +1,27 @@
+{
+  "provider": "discord",
+  "content_type": "application/json",
+  "type": "followup",
+  "mention_format": "<@{{USER_ID}}>",
+  "fallback_mention_format": "@{{GITHUB_USERNAME}}",
+  "body": {
+    "content": "{{AUTHOR_MENTION}}",
+    "embeds": [
+      {
+        "title": "{{FOLLOWUP_ICON}} {{FOLLOWUP_LABEL}} — {{OWNER}}/{{REPO}}#{{NUMBER}}",
+        "url": "{{PR_URL}}",
+        "color": "{{EMBED_COLOR}}",
+        "fields": [
+          { "name": "PR", "value": "[#{{NUMBER}} {{PR_TITLE}}]({{PR_URL}})", "inline": true },
+          { "name": "{{RECOMMENDATION_LABEL}}", "value": "{{ORIGINAL_RECOMMENDATION_EMOJI}} ~~{{ORIGINAL_RECOMMENDATION}}~~ → {{RECOMMENDATION_EMOJI}} {{RECOMMENDATION}}", "inline": true },
+          { "name": "{{APPLIED_LABEL}}", "value": "{{APPLIED_RATIO}} {{FOLLOWUP_FINDINGS_LABEL}}", "inline": true },
+          { "name": "✅ {{APPLIED_LABEL}}", "value": "{{APPLIED_BLOCK}}" },
+          { "name": "📋 {{NOT_APPLIED_LABEL}}", "value": "{{NOT_APPLIED_BLOCK}}" },
+          { "name": "⚠️ {{RETRACTED_LABEL}}", "value": "{{RETRACTED_BLOCK}}" }
+        ],
+        "description": "{{EXECUTIVE_SUMMARY}}\n\n{{UPDATED_COUNTS}}\n\n{{RECOMMENDATION_BLOCK}}",
+        "footer": { "text": "review-squad" }
+      }
+    ]
+  }
+}

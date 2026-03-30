@@ -1,0 +1,49 @@
+{
+  "provider": "teams",
+  "content_type": "application/json",
+  "type": "followup",
+  "mention_format": "<at>{{USER_ID}}</at>",
+  "fallback_mention_format": "@{{GITHUB_USERNAME}}",
+  "body": {
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    "themeColor": "{{THEME_COLOR}}",
+    "summary": "{{FOLLOWUP_ICON}} {{FOLLOWUP_LABEL}} — {{OWNER}}/{{REPO}}#{{NUMBER}}",
+    "sections": [
+      {
+        "activityTitle": "{{FOLLOWUP_ICON}} {{FOLLOWUP_LABEL}} — PR #{{NUMBER}}",
+        "facts": [
+          { "name": "Repo", "value": "{{OWNER}}/{{REPO}}" },
+          { "name": "PR", "value": "[#{{NUMBER}} {{PR_TITLE}}]({{PR_URL}})" },
+          { "name": "{{AUTHOR_LABEL}}", "value": "{{AUTHOR_MENTION}}" },
+          { "name": "{{RECOMMENDATION_LABEL}}", "value": "{{ORIGINAL_RECOMMENDATION_EMOJI}} ~~{{ORIGINAL_RECOMMENDATION}}~~ → {{RECOMMENDATION_EMOJI}} {{RECOMMENDATION}}" },
+          { "name": "{{APPLIED_LABEL}}", "value": "{{APPLIED_RATIO}} {{FOLLOWUP_FINDINGS_LABEL}}" },
+          { "name": "Commit", "value": "`{{FOLLOWUP_COMMIT}}`" }
+        ],
+        "text": "{{EXECUTIVE_SUMMARY}}"
+      },
+      {
+        "activityTitle": "{{APPLIED_LABEL}} ({{APPLIED_COUNT}}/{{TOTAL_FINDINGS}})",
+        "text": "{{APPLIED_BLOCK}}"
+      },
+      {
+        "activityTitle": "{{NOT_APPLIED_LABEL}} ({{NOT_APPLIED_COUNT}}/{{TOTAL_FINDINGS}})",
+        "text": "{{NOT_APPLIED_BLOCK}}"
+      },
+      {
+        "activityTitle": "{{RETRACTED_LABEL}} ({{RETRACTED_COUNT}})",
+        "text": "{{RETRACTED_BLOCK}}"
+      },
+      {
+        "text": "{{UPDATED_COUNTS}}\n\n{{RECOMMENDATION_BLOCK}}"
+      }
+    ],
+    "potentialAction": [
+      {
+        "@type": "OpenUri",
+        "name": "{{VIEW_ON_GITHUB_LABEL}}",
+        "targets": [{ "os": "default", "uri": "{{PR_URL}}" }]
+      }
+    ]
+  }
+}

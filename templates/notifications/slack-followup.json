@@ -1,0 +1,141 @@
+{
+  "provider": "slack",
+  "content_type": "application/json",
+  "type": "followup",
+  "mention_format": "<@{{USER_ID}}>",
+  "fallback_mention_format": "@{{GITHUB_USERNAME}}",
+  "body": {
+    "blocks": [
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": "{{FOLLOWUP_ICON}} {{FOLLOWUP_LABEL}} — PR #{{NUMBER}}",
+          "emoji": true
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{EXECUTIVE_SUMMARY}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "fields": [
+          { "type": "mrkdwn", "text": "*Repo*\n`{{OWNER}}/{{REPO}}`" },
+          { "type": "mrkdwn", "text": "*PR*\n<{{PR_URL}}|#{{NUMBER}} {{PR_TITLE}}>" },
+          { "type": "mrkdwn", "text": "*{{AUTHOR_LABEL}}*\n{{AUTHOR_MENTION}}" },
+          { "type": "mrkdwn", "text": "*{{RECOMMENDATION_LABEL}}*\n{{ORIGINAL_RECOMMENDATION_EMOJI}} ~~{{ORIGINAL_RECOMMENDATION}}~~ → {{RECOMMENDATION_EMOJI}} {{RECOMMENDATION}}" },
+          { "type": "mrkdwn", "text": "*{{APPLIED_LABEL}}*\n{{APPLIED_RATIO}} {{FOLLOWUP_FINDINGS_LABEL}}" },
+          { "type": "mrkdwn", "text": "*Commit*\n`{{FOLLOWUP_COMMIT}}`" }
+        ]
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{APPLIED_BLOCK}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{NOT_APPLIED_BLOCK}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{RETRACTED_BLOCK}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{UPDATED_COUNTS}}"
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "{{RECOMMENDATION_BLOCK}}"
+        }
+      },
+      { "type": "divider" },
+      {
+        "type": "actions",
+        "elements": [
+          {
+            "type": "button",
+            "text": { "type": "plain_text", "text": "📎 {{VIEW_ON_GITHUB_LABEL}}", "emoji": true },
+            "url": "{{PR_URL}}",
+            "style": "primary"
+          }
+        ]
+      }
+    ]
+  },
+  "conditional_blocks": {
+    "retracted": {
+      "include_when": "RETRACTED_COUNT > 0",
+      "omit_divider_before": true,
+      "description": "Only include the RETRACTED_BLOCK section and its preceding divider when there are retracted findings"
+    },
+    "not_applied": {
+      "include_when": "NOT_APPLIED_COUNT > 0",
+      "omit_divider_before": true,
+      "description": "Only include the NOT_APPLIED_BLOCK section and its preceding divider when there are non-applied findings"
+    }
+  },
+  "formatting_guidelines": {
+    "executive_summary": "📌 *Resumo Executivo* — max 5 lines. Start with correction status (X/Y applied). State recommendation change (previous → new). End with clear verdict.",
+    "applied_block": "✅  *{{APPLIED_LABEL}}* ({{APPLIED_COUNT}}/{{TOTAL_FINDINGS}})\n\nEach item: • severity_icon description — `file:line`\n\nUse \\n\\n between items for breathing room. Keep each item to one line.",
+    "not_applied_block": "📋  *{{NOT_APPLIED_LABEL}}* ({{NOT_APPLIED_COUNT}}/{{TOTAL_FINDINGS}})\n\nEach item: • severity_icon description → _justification_ {{ACCEPTED_ICON}}\n\nEnd each with ✅ or ❌ to indicate if justification was accepted.",
+    "retracted_block": "⚠️  *{{RETRACTED_LABEL}}* ({{RETRACTED_COUNT}})\n\nEach item: • severity_icon ~~original finding~~ → _reason it was wrong_\n\nUse strikethrough for the original finding text.",
+    "updated_counts": "Inline format: 🔴 X {{CRITICAL_LABEL}}  ·  🟠 X {{MAJOR_LABEL}}  ·  🟡 X {{MINOR_LABEL}}  ·  🔵 X {{SUGGESTION_LABEL}}  ·  ✅ text\n\nShow remaining open items only. If all resolved: single line with ✅ message.",
+    "recommendation_block": "{{RECOMMENDATION_EMOJI}} *{{RECOMMENDATION}}*\n\nIf APPROVE: brief positive summary.\nIf still REQUEST_CHANGES: numbered list of remaining items.",
+    "max_chars_per_section": 3000,
+    "separator": "  ·  "
+  },
+  "placeholders": {
+    "standard": [
+      "OWNER", "REPO", "NUMBER", "PR_TITLE", "PR_URL",
+      "AUTHOR_MENTION", "AUTHOR_LABEL",
+      "RECOMMENDATION", "RECOMMENDATION_EMOJI", "RECOMMENDATION_LABEL",
+      "VIEW_ON_GITHUB_LABEL"
+    ],
+    "followup_specific": [
+      "FOLLOWUP_ICON — ✅ if approve, ♻️ if still needs changes",
+      "FOLLOWUP_LABEL — i18n followup_review label",
+      "FOLLOWUP_COMMIT — short SHA of the correction commit",
+      "ORIGINAL_RECOMMENDATION — previous recommendation (e.g., REQUEST_CHANGES)",
+      "ORIGINAL_RECOMMENDATION_EMOJI — ⚠️ or 💬",
+      "EXECUTIVE_SUMMARY — follow-up executive summary",
+      "APPLIED_BLOCK — formatted applied corrections list",
+      "APPLIED_LABEL — i18n applied_corrections label",
+      "APPLIED_COUNT — number of applied corrections",
+      "APPLIED_RATIO — e.g., 7/9",
+      "NOT_APPLIED_BLOCK — formatted not-applied list with justifications",
+      "NOT_APPLIED_LABEL — i18n not_applied label",
+      "NOT_APPLIED_COUNT — number of not-applied items",
+      "RETRACTED_BLOCK — formatted retracted findings list",
+      "RETRACTED_LABEL — i18n retracted label",
+      "RETRACTED_COUNT — number of retracted findings",
+      "TOTAL_FINDINGS — total findings from original review",
+      "FOLLOWUP_FINDINGS_LABEL — i18n findings label",
+      "UPDATED_COUNTS — updated inline severity counts",
+      "RECOMMENDATION_BLOCK — final recommendation with context"
+    ]
+  }
+}
