@@ -398,34 +398,9 @@ export async function resolveForSlackBot(
     cwd,
   });
 
-  if (result?.confident) {
-    return result.id;
-  }
-
-  // If we got an ID but not confident (name mismatch), or no result at all,
-  // ask the requester via ephemeral message
-  try {
-    await opts.slackClient.chat.postEphemeral({
-      channel: opts.channelId,
-      user: opts.requesterId,
-      text: [
-        `I couldn't confidently match GitHub user \`@${opts.githubUsername}\` to a Slack user.`,
-        result
-          ? `Found a possible match (<@${result.id}>), but the name didn't match.`
-          : "No match found by email.",
-        "",
-        `To map this user manually, add to \`config.json > notifications.settings.user_mapping\`:`,
-        "```",
-        `"${opts.githubUsername}": { "slack": "USLACKID" }`,
-        "```",
-        `_Find the Slack member ID: click the user's profile → ⋮ → Copy member ID_`,
-      ].join("\n"),
-    });
-  } catch {
-    // Ephemeral message failed — continue silently
-  }
-
-  // If we have an uncertain match, still cache and use it
+  // If we got ANY match (confident or not), use it silently and cache it.
+  // Email-based matches are reliable enough — name mismatches are usually
+  // just formatting differences (e.g., "FraanciscoJunior" vs "Francisco Junior").
   if (result) {
     const cache = loadCache(cwd);
     const githubInfo = getGitHubUserInfo(
@@ -440,6 +415,23 @@ export async function resolveForSlackBot(
       method: "email",
     }, githubInfo);
     return result.id;
+  }
+
+  // No match at all — notify requester so they can add manual mapping
+  try {
+    await opts.slackClient.chat.postEphemeral({
+      channel: opts.channelId,
+      user: opts.requesterId,
+      text: [
+        `Could not find a Slack user for GitHub user \`@${opts.githubUsername}\` (no email match).`,
+        `To map manually, add to \`config.json > notifications.settings.user_mapping\`:`,
+        "```",
+        `"${opts.githubUsername}": { "slack": "USLACKID" }`,
+        "```",
+      ].join("\n"),
+    });
+  } catch {
+    // Ephemeral message failed — continue silently
   }
 
   return null;

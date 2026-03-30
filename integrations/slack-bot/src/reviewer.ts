@@ -42,9 +42,12 @@ This review was triggered from Slack by @{{user}} in #{{channel}}.
 
 You are running in NON-INTERACTIVE headless mode. Follow these rules:
 
-1. **SKIP all preview/confirmation steps** — do NOT ask the user for confirmation, do NOT show a preview before posting.
-2. **Auto-post the review** with event=COMMENT (NEVER use APPROVE or REQUEST_CHANGES).
-3. **Send notifications** after posting (if configured in config.json).
+1. **SKIP all preview/confirmation steps** — do NOT ask the user for confirmation, do NOT show a preview before posting. Proceed directly.
+2. **Auto-post the review to GitHub** — determine the event based on findings severity:
+   - If there are any 🔴 CRITICAL or 🟠 MAJOR findings → post as \`REQUEST_CHANGES\`
+   - If only 🟡 MINOR or 🔵 SUGGESTION findings → post as \`COMMENT\`
+   - NEVER use \`APPROVE\` — only humans can approve PRs.
+3. **Send the Slack webhook notification** after posting the GitHub review. Read \`SLACK_WEBHOOK_URL\` from the environment variable (it is already set). Follow the notification instructions in Step 10 of the review command — build the full Slack payload with executive summary, per-perspective blocks, severity counts, and recommendation. This is critical: the Slack notification is how the team sees the review.
 4. At the very end, output a summary block in this exact format:
 \`\`\`
 REVIEW_SUMMARY_START

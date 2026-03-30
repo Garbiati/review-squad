@@ -1,5 +1,6 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { config as dotenvConfig } from "dotenv";
 
 export interface SlackBotConfig {
   default_tier: "quick" | "focused" | "full";
@@ -61,6 +62,14 @@ export function loadConfig(): ReviewSquadConfig {
     );
   }
   const raw = readFileSync(configPath, "utf-8");
+
+  // Load root .env so SLACK_WEBHOOK_URL and other review-squad vars
+  // are available to Claude Code's Bash commands via process.env inheritance
+  const rootEnvPath = resolve(dir, ".env");
+  if (existsSync(rootEnvPath)) {
+    dotenvConfig({ path: rootEnvPath });
+  }
+
   return JSON.parse(raw) as ReviewSquadConfig;
 }
 
