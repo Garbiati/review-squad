@@ -58,7 +58,41 @@
       "testing": { "enabled": true },
       "qa": { "enabled": true },
       "architecture": { "enabled": false },
-      "performance": { "enabled": false }
+      "performance": { "enabled": false },
+      "tech-debt": { "enabled": true },
+      "breaking-change-detector": { "enabled": true }
+    }
+  },
+  "repo_review": {
+    "default_tier": "focused",
+    "baseline_strategy": "last_tag",
+    "cost_cap_usd": 50,
+    "auto_confirm": false,
+    "tiers": {
+      "quick": {
+        "agents": ["tech-debt"],
+        "max_files": 15,
+        "dedup_against_existing": false,
+        "create_issues": false
+      },
+      "focused": {
+        "agents": ["security", "architecture", "tech-debt", "breaking-change-detector"],
+        "max_files": 30,
+        "dedup_against_existing": true
+      },
+      "full": {
+        "agents": ["code", "security", "testing", "qa", "architecture", "performance", "tech-debt", "breaking-change-detector"],
+        "max_files": null,
+        "chunking": "by-layer",
+        "dedup_against_existing": true
+      }
+    },
+    "issues": {
+      "label_prefix": "review-squad",
+      "max_issues_per_run": 30,
+      "skip_wontfix": true,
+      "create_epic_tracker": true,
+      "assignee_strategy": "none"
     }
   },
   "repo_profiles": {

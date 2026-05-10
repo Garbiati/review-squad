@@ -23,11 +23,12 @@ pricing.json               — model pricing and plan limits (git-tracked, updat
 .env / .env.example        — webhook URLs and toggles for notification providers (git-ignored secrets)
 .user-mapping.json         — auto-resolved user mapping cache (git-ignored, auto-populated)
 profiles/stacks/           — review checklists per tech stack (dotnet-core-api, typescript-react, etc.)
-profiles/agents/           — prompts for specialist review perspectives (security, testing, qa, architecture, performance)
+profiles/agents/           — prompts for specialist review perspectives (security, testing, qa, architecture, performance, tech-debt, breaking-change-detector)
 .claude/commands/          — slash commands defining the flow for each review type
 templates/                 — Handlebars-like templates to format findings and summaries
 templates/i18n/            — localized labels (en, pt-BR, etc.)
 templates/notifications/   — notification templates per provider (slack, teams, discord)
+templates/issues/          — GitHub issue templates used by /full-repo-review (child issue + epic tracker)
 templates/user-resolution.md — shared user resolution algorithm for all commands
 integrations/              — adapters for other AI coding tools (Cursor, Aider, Codex CLI) and Slack bot
 integrations/slack-bot/    — Slack bot bridge: triggers reviews from Slack via Claude Code SDK
@@ -198,6 +199,37 @@ The Slack bot (`integrations/slack-bot/`) allows team members to trigger reviews
 
 **Configuration:** `config.json > slack_bot` controls tier defaults, concurrency, rate limits, allowed users/channels, and timeout. Slack tokens are stored in `integrations/slack-bot/.env` (git-ignored).
 
+### Repo-wide Reviews (`/full-repo-review`)
+
+Unlike PR reviews (which analyze a diff), `/full-repo-review` analyzes the entire `master` branch and creates **GitHub issues** with stable IDs for each finding. Designed for periodic health checks (monthly cadence recommended).
+
+**Key differences from `/full-review`:**
+
+| Aspect | `/full-review` (PR) | `/full-repo-review` (branch) |
+|---|---|---|
+| Input | PR diff | Whole repo (local clone) |
+| Output | PR review with inline comments | GitHub issues + epic tracker |
+| Dedup | vs prior review on same PR | vs existing issues by Stable ID |
+| Cost | ~$3/run | ~$10-300/run depending on tier |
+
+**Tiers** (in `config.json > repo_review.tiers`):
+- **quick**: `tech-debt` only, top 15 hotspots, dry-run by default
+- **focused** (default): `security`, `architecture`, `tech-debt`, `breaking-change-detector`, top 30 hotspots
+- **full**: all 8 perspectives, by-layer chunking, no hotspot cap
+
+**Stable ID:** `sha1(perspective + "|" + normalized_title)[:12]` — survives line number / file count drift so re-runs update existing issues instead of duplicating.
+
+**Defenses built-in:**
+- `cost_cap_usd` (default 50) — hard abort if estimate exceeds
+- `max_issues_per_run` (default 30) — cap to prevent issue spam; deferred findings logged in tracker
+- Respect `wontfix` decisions on existing issues
+- Honor `.review-squad-ignore` (gitignore-style globs) at repo root
+- Breaking changes always get an issue (bypass cap)
+
+**Issue structure:** each finding becomes one issue with labels `review-squad`, `severity:<level>`, `<perspective>`, plus `breaking-change` when applicable. An epic tracker issue ties them together with run metadata.
+
+**Templates:** `templates/issues/repo-review-issue.md` (child) and `templates/issues/epic-tracker.md` (tracker).
+
 ### Adding a Repository
 
 1. Add mapping in `config.json` → `repo_profiles`
@@ -220,6 +252,7 @@ The Slack bot (`integrations/slack-bot/`) allows team members to trigger reviews
 | `/architecture-review` | `/architecture-review owner/repo#123` | SOLID, layering, coupling, API design |
 | `/performance-review` | `/performance-review owner/repo#123` | Algorithmic complexity, N+1, memory, caching |
 | `/full-review` | `/full-review owner/repo#123 [--quick\|--focused\|--full]` | All perspectives in parallel + consolidated summary |
+| `/full-repo-review` | `/full-repo-review owner/repo [--quick\|--focused\|--full] [--dry-run]` | Repo-wide health check on master; opens GitHub issues with stable IDs and an epic tracker |
 | `/list-prs` | `/list-prs [org/repo]` | List open PRs (accepts `--mine`, `--review-requested`) |
 | `/approve-pr` | `/approve-pr owner/repo#123` | Approve after status check and confirmation |
 | `/update-pricing` | `/update-pricing` | Fetch and update model pricing data |
@@ -247,6 +280,8 @@ All commands accept:
 
 - NEVER approve PRs automatically without explicit user confirmation
 - NEVER post reviews without first showing the preview to the user
+- NEVER create GitHub issues via `/full-repo-review` without confirmation, and never exceed `repo_review.issues.max_issues_per_run`
+- NEVER ignore `repo_review.cost_cap_usd` — abort if estimate exceeds; do not silently degrade
 - Respect `.gitignore` and do not analyze generated files (bin/, obj/, node_modules/, dist/)
 - For C# repos: focus on Clean Architecture, DDD, SOLID
 - For TypeScript repos: focus on type safety, hooks patterns, component design
